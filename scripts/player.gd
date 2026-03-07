@@ -1,9 +1,17 @@
 extends CharacterBody2D
 
+# Init variables
 var speed = 300
+var rocket_scene = preload("res://scenes/rocket.tscn")
+
+func _process(delta):
+	shoot_rocket()
 
 func _physics_process(delta: float) -> void:
+
+	# Player movement
 	velocity = Vector2(0,0)
+	
 	if Input.is_action_pressed("move_right"):
 		velocity.x = speed
 	if Input.is_action_pressed("move_left"):
@@ -12,6 +20,12 @@ func _physics_process(delta: float) -> void:
 		velocity.y = -speed
 	if Input.is_action_pressed("move_down"):
 		velocity.y = speed
-	move_and_slide()
 	
+	move_and_slide()
 	global_position = global_position.clamp(Vector2(0,0), get_viewport_rect().size)
+
+func shoot_rocket():
+	if Input.is_action_just_pressed("shoot"):
+		var rocket_instance = rocket_scene.instantiate()
+		add_child(rocket_instance)
+		rocket_instance.global_position.x += 70
