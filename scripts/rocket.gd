@@ -4,3 +4,6 @@ extends Area2D
 
 func _physics_process(delta: float) -> void:
 	global_position.x += speed*delta
+
+func _on_visible_notifier_screen_exited() -> void:
+	queue_free()
