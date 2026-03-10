@@ -27,6 +27,10 @@ func _on_enemy_spawner_enemy_spawned(enemy_instance: Variant) -> void:
 	enemy_instance.connect("died", _on_enemy_died)
 	add_child(enemy_instance)
 
+func _on_enemy_spawner_moving_enemy_spawned(enemy_instance: Variant) -> void:
+	add_child(enemy_instance)
+	enemy_instance.enemy.connect("died", _on_enemy_died)
+
 func _on_enemy_died():
 	enemy_hit_sound.play()
 	score += 100

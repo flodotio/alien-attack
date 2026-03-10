@@ -29,4 +29,10 @@ position = Vector2(1350, 675)
 wait_time = 2.0
 autostart = true
 
+[node name="TimerMovingEnemy" type="Timer" parent="." unique_id=484587454]
+wait_time = 7.0
+autostart = true
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="TimerMovingEnemy" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="TimerMovingEnemy" to="." method="_on_timer_moving_enemy_timeout"]
