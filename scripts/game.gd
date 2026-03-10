@@ -6,6 +6,8 @@ extends Node2D
 @onready var player = $Player
 @onready var hud = $UI/HUD
 @onready var ui = $UI
+@onready var enemy_hit_sound = $Sound/EnemyHitSound
+@onready var player_hit_sound = $Sound/PlayerHitSound
 
 var game_over_scene = preload("res://scenes/game_over.tscn")
 
@@ -14,25 +16,35 @@ func _ready():
 
 func _on_death_zone_area_entered(area: Area2D) -> void:
 	area.queue_free()
-	take_damage()
+	
+	if lives > 0:
+		take_damage()
 
 func _on_player_took_damage() -> void:
 	take_damage()
-	
-	if lives == 0:
-		game_over()
 
 func _on_enemy_spawner_enemy_spawned(enemy_instance: Variant) -> void:
 	enemy_instance.connect("died", _on_enemy_died)
 	add_child(enemy_instance)
 
+func _on_enemy_spawner_moving_enemy_spawned(enemy_instance: Variant) -> void:
+	add_child(enemy_instance)
+	enemy_instance.enemy.connect("died", _on_enemy_died)
+
 func _on_enemy_died():
+	enemy_hit_sound.play()
 	score += 100
 	hud.set_score_label(score)
 
 func take_damage():
-	lives -= 1
+	if lives > 0:
+		lives -= 1
+		
+	if lives == 0:
+		game_over()
+		
 	hud.set_lives_label(lives)
+	player_hit_sound.play()
 
 func game_over():
 	player.die()
