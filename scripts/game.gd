@@ -14,13 +14,12 @@ func _ready():
 
 func _on_death_zone_area_entered(area: Area2D) -> void:
 	area.queue_free()
-	take_damage()
+	
+	if lives > 0:
+		take_damage()
 
 func _on_player_took_damage() -> void:
 	take_damage()
-	
-	if lives == 0:
-		game_over()
 
 func _on_enemy_spawner_enemy_spawned(enemy_instance: Variant) -> void:
 	enemy_instance.connect("died", _on_enemy_died)
@@ -31,7 +30,12 @@ func _on_enemy_died():
 	hud.set_score_label(score)
 
 func take_damage():
-	lives -= 1
+	if lives > 0:
+		lives -= 1
+		
+	if lives == 0:
+		game_over()
+		
 	hud.set_lives_label(lives)
 
 func game_over():
